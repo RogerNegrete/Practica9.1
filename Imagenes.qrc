@@ -3,5 +3,7 @@
         <file>abrir-documento.png</file>
         <file>cerrar.png</file>
         <file>disquete.png</file>
+        <file>NewText.png</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

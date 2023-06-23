@@ -4,8 +4,8 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QTextStream>
-#include <QTextStream>
-
+#include <QStatusBar>
+#include <QMessageBox>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -20,10 +20,14 @@ public:
 
 private slots:
     void on_actionAbrir_triggered();
-
     void on_actionSalir_triggered();
+    void on_actionGuardar_triggered();
 
 private:
     Ui::MainWindow *ui;
+    void open();
+    void campoTexto();
+    void updateStatusBar();
+    QString currentFilePath;
 };
 #endif // MAINWINDOW_H
