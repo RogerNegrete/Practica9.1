@@ -23,6 +23,8 @@ private slots:
     void on_actionSalir_triggered();
     void on_actionGuardar_triggered();
 
+    void on_actionNuevo_triggered();
+
 private:
     Ui::MainWindow *ui;
     void open();

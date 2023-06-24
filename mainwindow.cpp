@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+QString text;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -13,25 +14,10 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-/*
-void MainWindow::open()
-{
-    if (maybeSave()) {
-        QString fileName = QFileDialog::getOpenFileName(this);
-        if (!fileName.isEmpty()) {
-            QFile file(fileName);
-            if (file.open(QFile::ReadOnly | QFile::Text)) {
-                textEdit->setPlainText(file.readAll());
-                currentFile = fileName;
-                isModified = false;
-            }
-        }
-    }
-}*/
 
 void MainWindow::on_actionAbrir_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Abrir Archivo"), "", tr("Archivos de Texto (*.txt);;Todos los Archivos (*)"));
+    QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Abrir Archivo"),QDir::homePath(), "Dat Files (*.dat)");
 
     if (!fileName.isEmpty())
     {
@@ -41,8 +27,9 @@ void MainWindow::on_actionAbrir_triggered()
             QMessageBox::critical(this, tr("Error"), tr("No se pudo abrir el archivo"));
             return;
         }
-        QTextStream in(&file);
-        QString text = in.readAll();
+        QDataStream in(&file);
+
+        in>>text;
         file.close();
 
         ui->textEdit->setText(text);
@@ -53,29 +40,47 @@ void MainWindow::on_actionAbrir_triggered()
 
 void MainWindow::on_actionSalir_triggered()
 {
+    QString textoActual= ui->textEdit->toPlainText();
+    if (textoActual!=text) {
+        QMessageBox::StandardButton respuesta;
+
+        respuesta=QMessageBox::question(this, tr("Mensaje"), tr("Hay cambios en el archivo, Desea Guardar?"),QMessageBox::Yes|QMessageBox::No);
+        if(respuesta==QMessageBox::Yes){
+            MainWindow::on_actionGuardar_triggered();
+
+        }
+
+
+    }
     this->close();
+
 }
 
 
 void MainWindow::on_actionGuardar_triggered()
 {
+    QString fileName;
     if (!currentFilePath.isEmpty())
     {
-        QFile file(currentFilePath);
-        if (!file.open(QIODevice::WriteOnly))
-        {
-            QMessageBox::critical(this, tr("Error"), tr("No se pudo abrir el archivo"));
-            return;
-        }
-        QTextStream out(&file);
-        out << ui->textEdit->toPlainText();
-        file.close();
+        fileName=currentFilePath;
+
     }
     else
     {
-        // Aquí puedes manejar el caso en que no se haya abierto ningún archivo.
-        // Tal vez mostrar una ventana de diálogo de guardar como...
+        //Guardar como
+        fileName = QFileDialog::getSaveFileName(nullptr, tr("Guardar Archivo"), QDir::homePath(), "DAT files (*.dat)");
+        fileName+=".dat";
     }
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        QMessageBox::critical(this, tr("Error"), tr("No se pudo abrir el archivo"));
+        return;
+    }
+    QDataStream out(&file);
+    out << ui->textEdit->toPlainText();
+    file.close();
+    QMessageBox::information(this, tr("Mensaje"), tr("Guardado con exito"));
 }
 
 void MainWindow::updateStatusBar()
@@ -91,3 +96,19 @@ void MainWindow::campoTexto()
 {
     connect(ui->textEdit, &QTextEdit::textChanged, this, &MainWindow::updateStatusBar);
 }
+
+void MainWindow::on_actionNuevo_triggered()
+{
+
+    QMessageBox::StandardButton respuesta;
+
+    respuesta=QMessageBox::question(this, tr("Mensaje"), tr("Hay cambios en el archivo, Desea Guardar?"),QMessageBox::Yes|QMessageBox::No);
+    if(respuesta==QMessageBox::Yes){
+        MainWindow::on_actionGuardar_triggered();
+
+    }
+        ui->textEdit->setText("");
+        currentFilePath="";
+
+}
+
