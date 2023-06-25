@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "acerca.h"
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QTextStream>
@@ -24,6 +25,8 @@ private slots:
     void on_actionGuardar_triggered();
 
     void on_actionNuevo_triggered();
+
+    void on_actionAcerca_de_triggered();
 
 private:
     Ui::MainWindow *ui;

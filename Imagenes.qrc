@@ -4,6 +4,7 @@
         <file>cerrar.png</file>
         <file>disquete.png</file>
         <file>NewText.png</file>
+        <file>bloc.png</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

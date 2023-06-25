@@ -112,3 +112,10 @@ void MainWindow::on_actionNuevo_triggered()
 
 }
 
+
+void MainWindow::on_actionAcerca_de_triggered()
+{
+    Acerca ventana;
+    ventana.exec();
+}
+
