@@ -30,7 +30,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    void open();
     void campoTexto();
     void updateStatusBar();
     QString currentFilePath;
